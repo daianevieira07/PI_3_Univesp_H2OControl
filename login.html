@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H2O Control - Login</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-container">
+                <svg viewBox="0 0 100 100" class="water-drop" width="40" height="40">
+                    <path d="M50,0 C50,0 20,40 20,70 C20,85 35,100 50,100 C65,100 80,85 80,70 C80,40 50,0 50,0 Z" fill="#0066cc"></path>
+                </svg>
+                <h1>H2OCONTROL</h1>
+            </div>
+            <h2>Entrar</h2>
+            <div class="login-options">
+                <form id="email-login-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" name="password" required placeholder="********">
+                    </div>
+                    <div class="form-action">
+                        <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                        <button type="submit" class="btn btn-primary">Entrar</button>
+                    </div>
+                </form>
+                
+                <div class="divider">
+                    <span>OU</span>
+                </div>
+                
+                <button class="btn-google" id="google-login">
+                    <img src="img/google1.png" alt="Google logo" class="google-icon">
+                </button>
+                
+                <div class="register-link">
+                    Não tem uma conta? <a href="#" id="signup-link">Cadastre-se</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Criar Conta</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Nome</label>
+                    <input type="text" id="register-name" name="name" required placeholder="Seu nome completo">
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" name="email" required placeholder="seu@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Senha</label>
+                    <input type="password" id="register-password" name="password" required placeholder="********">
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirmar Senha</label>
+                    <input type="password" id="register-confirm-password" name="confirm-password" required placeholder="********">
+                </div>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="login-script.js"></script>
+</body>
+</html>

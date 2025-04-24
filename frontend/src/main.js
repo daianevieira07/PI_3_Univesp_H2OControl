@@ -1,6 +1,6 @@
 import './assets/main.css'
 
-import { createApp, inject } from 'vue'
+import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 

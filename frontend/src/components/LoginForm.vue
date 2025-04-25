@@ -3,13 +3,16 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '@/services/http';
 import { useMainStore } from '@/stores/session';
+import ModalSignup from './ModalSignup.vue';
+import { validateEmail, validatePassword } from '@/utils/validateFields';
 
-const emit = defineEmits(['success', 'error']);
+const emit = defineEmits(['success', 'error', 'successSignup', 'errorSignup']);
 const router = useRouter();
 const auth = useMainStore();
 
 const email = ref('');
 const password = ref('');
+const modal = ref(null);
 
 // Função para obter o token de autenticação
 // Faz uma requisição POST para a API com o e-mail e a senha do usuário
@@ -33,50 +36,53 @@ const obterToken = async () => {
 // Função para lidar com o envio do formulário de login
 // Verifica se o e-mail e a senha estão preenchidos corretamente antes de fazer a requisição
 const acceptLogin = async () => {
-    if (!validateLogin(email.value, true) || !validateLogin(password.value)) {
+    if (!validateEmail(email.value) || !validatePassword(password.value)) {
         return;
     }
         const success = await obterToken();
         if (success) {
             emit('success'); 
             setTimeout(() => {
-                auth.toggleValue(true); // Atualiza o estado de autenticação no store
-                router.push({ name: 'dashboard' }); // Redireciona para a página inicial após o login
+                auth.toggleValue(true);
+                router.push({ name: 'dashboard' }); 
             }, 2000);
         }
     }
 
-    
-// Função de validação para verificar se os campos estão preenchidos corretamente
-// e se o e-mail é válido
-
-const validateLogin = (value, email=false) => {
-    if (!value) {
-        return false;
+    const closeModal = () => {
+        modal.value = false; // Fecha o modal
     }
 
-    if (email && !/\S+@\S+\.\S+/.test(value)) {
-        return false;
-    }
+    //Toast de feedback para o usuário após o cadastro
+    const signupFeedback = (feedback) => {
+        if (feedback === 'success') {
+            emit('successSignup');
+        } else {
+            emit('errorSignup'); 
+        }
+    };
 
-    return true;
-};
-
+    // Auto-preenchimento dos campos de e-mail e senha após o cadastro ser realizado
+    const handleFormData = (formData) => {
+        email.value = formData.email; 
+        password.value = formData.password;
+    };
 </script>
 
 <template>
-    <BForm @submit.prevent="acceptLogin" novalidate>
-        <BRow class="mb-3">
-            <BCol cols="2" align-self="center">
+    <BForm id="login" @submit.prevent="acceptLogin" novalidate>
+        <BRow class="mb-3" align-h="center" align-v="center">
+            <BCol sm="auto" class="p-0 text-center" md="2">
                 <BImg
                     src="./src/assets/logo.svg"
                     width="50"
                     height="50"
                     lazy
                     class="logo"
+                    fluid                    
                 />
             </BCol>
-            <BCol cols="10" class="text-center align-self-center">
+            <BCol sm="auto" md="auto" class="text-center">
                 <h1 class="mb-0">H2OControl</h1>
             </BCol>
         </BRow>
@@ -85,19 +91,20 @@ const validateLogin = (value, email=false) => {
             <BFormGroup
                 label="Email"
                 label-for="email"
-                content-cols="12"
-                label-cols="3"
+                content-cols-md="12"
+                label-cols-md="3"
             >
                 <BFormInput 
                     id="email"
+                    class="login-form-input"
                     v-model="email"
                     type="email"
                     placeholder="seu@email.com"
-                    :state="validateLogin(email, true) ? null : false"
+                    :state="validateEmail(email) ? null : false"
                     required
                 />
                 <BFormInvalidFeedback 
-                    :state="validateLogin(email, true) ? null : false"
+                    :state="validateEmail(email) ? null : false"
                     text="Email inválido"                       
                 />
             </BFormGroup>
@@ -107,33 +114,61 @@ const validateLogin = (value, email=false) => {
             <BFormGroup
                 label="Senha"
                 label-for="password"
-                content-cols="12"
-                label-cols="3"
+                content-cols-md="12"
+                label-cols-md="3"
             >
                 <BFormInput 
                     id="password"
                     v-model="password"
                     type="password"
                     placeholder="*********"
-                    :state="validateLogin(password) ? null : false"
+                    :state="validatePassword(password) ? null : false"
                     required
                 />
             </BFormGroup>
         </BRow>
-        <BRow class="justify-content-between">
-            <BCol cols="7" class="text-center align-self-center">
-                <BLink href="/recuperar-senha" id="forgot-password">Esqueci minha senha</BLink>
+        <BRow class="justify-content-between" align-h="center">
+            <BCol sm="auto" class="mb-2 mb-sm-0 text-center align-self-center">
+                <BLink href="#" id="forgot-password">Esqueci minha senha</BLink>
             </BCol>
-            <BCol cols="3 p-0">
+            <BCol sm="auto" class="text-center align-self-center">
                 <BButton type="submit" variant="primary" block>Entrar</BButton>
+            </BCol>
+        </BRow>
+        <BRow>
+            <BCol class="divider d-flex">
+                <span>OU</span>
+            </BCol>
+        </BRow>
+        <BRow class="mb-3">
+            <BCol md="12" class="text-center align-self-center">
+                <BButton variant="outline-primary" @click="modal = !modal" block>Criar conta</BButton>
+                <BModal 
+                    v-model="modal"
+                    title="Criar conta" 
+                    size="md" 
+                    hide-footer 
+                    centered 
+                    scrollable 
+                    no-header-close 
+                    no-footer
+
+                >
+                    <ModalSignup 
+                        @success="signupFeedback('success')" 
+                        @error="signupFeedback('error')" 
+                        @close="closeModal" 
+                        @form-data="handleFormData"
+                    />
+                </BModal>
             </BCol>
         </BRow>
     </BForm>
 </template>
 
 <style scoped>
-    form{
-        background-color: #fff;
+    #login {
+        background-color: var(--background-color);
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -142,10 +177,27 @@ const validateLogin = (value, email=false) => {
         font-family: "Bellota Text", sans-serif;
     }
     #forgot-password {
-        color: #007bff;
+        color: var(--link-color);
         text-decoration: none;
     }
     #forgot-password:hover {
         text-decoration: underline;
+    }
+    .divider {
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .divider span {
+        background-color: var(--background-color);
+        padding: 0 10px;
+        color: var(--text-color);
+    }
+    .divider::before,
+    .divider::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid var(--border-color);
+        margin: auto;
     }
 </style>

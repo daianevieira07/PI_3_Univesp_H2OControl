@@ -5,6 +5,8 @@ import { ref } from 'vue'
 
 const toastLoginSuccess = ref(false)
 const toastLoginError = ref(false)
+const toastSignupSuccess = ref(false)
+const toastSignupError = ref(false)
 
 // Expõe funções para o componente filho
 const handleLoginSuccess = () => {
@@ -15,6 +17,16 @@ const handleLoginSuccess = () => {
 const handleLoginError = () => {
   toastLoginError.value = true
   setTimeout(() => toastLoginError.value = false, 5000)
+}
+
+const handleSignupSuccess = () => {
+  toastSignupSuccess.value = true
+  setTimeout(() => toastSignupSuccess.value = false, 3000)
+}
+
+const handleSignupError = () => {
+  toastSignupError.value = true
+  setTimeout(() => toastSignupError.value = false, 5000)
 }
 </script>
 
@@ -28,12 +40,21 @@ const handleLoginError = () => {
             rounded="sm"
             z-index="10"
           >
-    <LoginForm @success="handleLoginSuccess" @error="handleLoginError"/>
+    <LoginForm 
+      @success="handleLoginSuccess" 
+      @error="handleLoginError"
+      @successSignup="handleSignupSuccess"
+      @errorSignup="handleSignupError"
+    />
     <ToastMessages 
       :show-error="toastLoginError"
       :show-success="toastLoginSuccess"
+      :show-signup-error="toastSignupError"
+      :show-signup-success="toastSignupSuccess"
       @update:show-error="(val) => toastLoginError = val"
       @update:show-success="(val) => toastLoginSuccess = val"
+      @update:show-signup-error="(val) => toastSignupError = val"
+      @update:show-signup-success="(val) => toastSignupSuccess = val"
     />
 </BOverlay>
     </BContainer>

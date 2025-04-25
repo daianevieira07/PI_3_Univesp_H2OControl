@@ -1,0 +1,14 @@
+:root {
+    --primary-color: #2489F2;
+    --secondary-color: #00aaff;
+    --background-color: #ffffff;
+    --link-color: #007bff;
+    --text-color: #333333;
+    --border-color: #e1e4e8;
+    --hover-bg-color: #f0f2f5;
+}
+body .form-control,
+body input.form-control {
+    padding-right: 0.75rem !important;
+    background: none !important;
+  }

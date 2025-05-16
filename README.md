@@ -76,11 +76,8 @@ npm run dev
 
 ### Acessando o Sistema
 
-1. Acesse o frontend através do navegador
-2. Use as seguintes credenciais para teste:
-   - Email: admin@h2ocontrol.com
-   - Senha: h2ocontrol123
-
+1. Acesse o frontend através do navegador e crie uma conta para acesso
+   
 ### Desenvolvimento
 
 Para desenvolvimento local sem Docker:

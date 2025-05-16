@@ -44,7 +44,6 @@ const newClient = async () => {
     };
 
     await createCliente(data);
-    console.log('Cliente adicionado com sucesso:', data);
 
     await getClientes(); // Atualiza a lista
     newclient.value = false; // Fecha o modal se estiver usando
@@ -55,7 +54,6 @@ const newClient = async () => {
 
 onMounted(() => {
   getClientes();
-  console.log('Componente DashboardClientes montado');
 });
 
 const enderecoFormatado = (endereco) => {

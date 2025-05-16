@@ -57,7 +57,6 @@ export const cadastrarProduto = async (formData) => {
       }
     );
 
-    console.log('Produto e movimentação cadastrados com sucesso!');
     return true;
   } catch (error) {
     console.error('Erro ao cadastrar:', error);

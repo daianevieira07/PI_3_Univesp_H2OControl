@@ -46,7 +46,6 @@ export const validarToken = async () => {
         // Atualiza tokens no localStorage
         localStorage.setItem('token', response.data.access);
         localStorage.setItem('refreshToken', response.data.refresh);
-        console.log("Token renovado com sucesso:");
         auth.toggleValue(true); // Mantém o usuário logado
         return true;
 

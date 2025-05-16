@@ -14,7 +14,6 @@ const getPedidos = async () => {
     try{
         // Chama a função para obter os itens do estoque
         items.value = await fetchDatabase('vendas', 'all', 'id_cliente', 'all');
-        // console.log(items.value);
         
         pedidos.value = items.value
             .filter(pedido => pedido.status_pedido == 1)
@@ -37,7 +36,6 @@ const getPedidos = async () => {
                 };
             });
 
-        // console.log(pedidos.value);
     } catch (error) {
         console.error('Erro ao obter pedidos:', error);
         items.value = []; // Limpa a lista de itens caso haja erro

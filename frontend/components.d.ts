@@ -8,12 +8,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    BBadge: typeof import('bootstrap-vue-next/components/BBadge')['BBadge']
     BButton: typeof import('bootstrap-vue-next/components/BButton')['BButton']
     BCard: typeof import('bootstrap-vue-next/components/BCard')['BCard']
-    BCardFooter: typeof import('bootstrap-vue-next/components/BCard')['BCardFooter']
     BCardGroup: typeof import('bootstrap-vue-next/components/BCard')['BCardGroup']
-    BCardHeader: typeof import('bootstrap-vue-next/components/BCard')['BCardHeader']
     BCardText: typeof import('bootstrap-vue-next/components/BCard')['BCardText']
     BCol: typeof import('bootstrap-vue-next/components/BContainer')['BCol']
     BCollapse: typeof import('bootstrap-vue-next/components/BCollapse')['BCollapse']
@@ -40,7 +37,6 @@ declare module 'vue' {
     BToast: typeof import('bootstrap-vue-next/components/BToast')['BToast']
     BTooltip: typeof import('bootstrap-vue-next/components/BTooltip')['BTooltip']
     IMaterialSymbolsLogout: typeof import('~icons/material-symbols/logout')['default']
-    IMaterialSymbolsPerson: typeof import('~icons/material-symbols/person')['default']
     IMdiAccountSearch: typeof import('~icons/mdi/account-search')['default']
     IMdiCheck: typeof import('~icons/mdi/check')['default']
     IMdiClockOutline: typeof import('~icons/mdi/clock-outline')['default']
@@ -56,7 +52,6 @@ declare module 'vue' {
     ModalNewProduct: typeof import('./src/components/ModalNewProduct.vue')['default']
     ModalRemoveItem: typeof import('./src/components/ModalRemoveItem.vue')['default']
     ModalSignup: typeof import('./src/components/ModalSignup.vue')['default']
-    NewOrder: typeof import('./src/components/ModalNewOrder.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('./src/components/Sidebar.vue')['default']

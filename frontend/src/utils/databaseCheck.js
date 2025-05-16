@@ -37,6 +37,5 @@ export const updatePedidoStatus = async (id, status) => {
     }
   );
 
-  console.log('Status atualizado com sucesso:', response.data);
   return response.data;
 };

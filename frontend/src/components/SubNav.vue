@@ -16,7 +16,6 @@ const closeModal = () => {
 const handleNewProductModal = (data) => {
     toastNewProduct.value = true
     // Lógica para lidar com o evento de sucesso do modal
-    console.log('Produto adicionado com sucesso:');
     emit('success');
     closeModal();
     setTimeout(() => {toastNewProduct.value = false, window.location.reload()}, 2000)

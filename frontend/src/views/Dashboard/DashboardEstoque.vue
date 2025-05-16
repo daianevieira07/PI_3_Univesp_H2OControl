@@ -46,7 +46,6 @@ const getEstoque = async () => {
     });
 
     items.value = estoque;
-    console.log('get do estoque: ', items.value);
   } catch (error) {
     console.error('Erro ao obter estoque:', error);
     items.value = [];
@@ -66,7 +65,6 @@ const handleConfirmRemoveItem = async (formData) => {
 
 const handleRemoveItem = async (formData) => {
     try {
-            // console.log('antes de excluir '+formData.quantidade);
         const data = {
                         "id_produto": itemToRemove.id_produto,
                         "id_usuario": localStorage.getItem('idUser'),
@@ -90,7 +88,6 @@ const handleRemoveItem = async (formData) => {
 
 const tabela = computed(() => {
     return items.value.map(p => {
-        console.log(p);
         return {
             id_produto: p.id_produto,
             produto: p.produto ? p.produto : 'Produto não encontrado',
@@ -107,7 +104,6 @@ const modalRemoveItem = (item) => {
     itemToRemove.id_produto = item.id_produto;
     itemToRemove.nome = item.produto;
     itemToRemove.quantidade_atual = item.quantidade;
-    // console.log(itemToRemove);
     modalRemove.value = true; // Abre o modal de remoção
 };
 

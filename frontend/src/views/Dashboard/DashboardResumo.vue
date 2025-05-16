@@ -18,7 +18,6 @@ const dados = ref([]); // Dados dos clientes a serem exibidos
 const getVendas = async () => {
     try {
         // Chama a função para obter vendas
-        console.log('dentro do getVendas');
         vendas.value = await fetchDatabase('vendas', limit.value, order.value, fields.value);
 
         vendasTabela.value = vendas.value.slice(0, 5); // Limita a exibição a 5 vendas

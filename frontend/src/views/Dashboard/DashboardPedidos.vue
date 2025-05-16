@@ -15,7 +15,6 @@ const getPedidos = async () => {
     try{
         // Chama a função para obter os itens do estoque
         items.value = await fetchDatabase('vendas', 'all', 'id_cliente', 'all');
-        // console.log(items.value);
         
         pedidos.value = items.value
             .filter(pedido => pedido.status_pedido == 0)
@@ -39,7 +38,6 @@ const getPedidos = async () => {
                 };
             });
 
-        // console.log(pedidos.value);
     } catch (error) {
         console.error('Erro ao obter pedidos:', error);
         items.value = []; // Limpa a lista de itens caso haja erro
@@ -53,7 +51,6 @@ onMounted(() => {
 
 
 const detalhes = (pedido) => {
-  console.log(pedido);
   pedidoSelecionado.value = pedido;
   modalDetalhes.value = true;
 };
@@ -61,7 +58,6 @@ const detalhes = (pedido) => {
 
 const cancelarPedido = async () => {
   const selecionados = pedidos.value.filter(p => p.selecionar);
-  console.log('Cancelando:', selecionados.map(p => p.id_venda));
 
   const promises = selecionados.map(p =>
     updatePedidoStatus(p.id_venda, 2)
@@ -78,7 +74,6 @@ const cancelarPedido = async () => {
 
 const marcarConcluido = async () => {
   const selecionados = pedidos.value.filter(p => p.selecionar);
-  console.log('Concluindo:', selecionados.map(p => p.id_venda));
 
   const promises = selecionados.map(p =>
     updatePedidoStatus(p.id_venda, 1)

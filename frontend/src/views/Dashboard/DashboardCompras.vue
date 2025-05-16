@@ -17,7 +17,6 @@ const getCompras = async () => {
         // Chama a função para obter os itens do estoque
         items.value = await fetchDatabase('movimentacoes', 'all', '-data_movimentacao', 'all');
         Compras.value = items.value.filter(compra => {return compra.tipo_movimentacao == 1});
-        console.log('dentro do try '+Compras.value);
     } catch (error) {
         console.error('Erro ao obter movimentações:', error);
         items.value = []; // Limpa a lista de itens caso haja erro

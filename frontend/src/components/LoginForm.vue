@@ -6,6 +6,7 @@ import { useMainStore } from '@/stores/session';
 import ModalSignup from './ModalSignup.vue';
 import { validateEmail, validatePassword } from '@/utils/validateFields';
 import { userChecker } from '@/utils/userChecker';
+import logo from '@/assets/logo.svg'; // Importando a imagem do logo
 
 const emit = defineEmits(['success', 'error', 'successSignup', 'errorSignup']);
 const router = useRouter();
@@ -76,7 +77,7 @@ const acceptLogin = async () => {
         <BRow class="mb-3" align-h="center" align-v="center">
             <BCol sm="auto" class="p-0 text-center" md="2">
                 <BImg
-                    src="./src/assets/logo.svg"
+                    :src="logo"
                     width="50"
                     height="50"
                     lazy

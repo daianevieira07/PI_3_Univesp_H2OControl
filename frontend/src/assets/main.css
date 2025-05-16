@@ -6,9 +6,15 @@
     --text-color: #333333;
     --border-color: #e1e4e8;
     --hover-bg-color: #f0f2f5;
+    --font-primary: "Bellota Text", sans-serif;
 }
+
 body .form-control,
 body input.form-control {
     padding-right: 0.75rem !important;
     background: none !important;
-  }
+}
+
+.content {
+    margin: 0px 20px;
+}

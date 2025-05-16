@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
+from django.db.models import Sum
 from .models import Usuario, Cliente, Endereco, Estoque, EstoqueMovimentacao, Venda
 
 class UserSerializer(serializers.ModelSerializer):
@@ -51,7 +52,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class EnderecoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Endereco
-        fields = '__all__'
+        exclude = ['id_cliente']
 
 class ClienteSerializer(serializers.ModelSerializer):
     endereco = EnderecoSerializer(read_only=True)
@@ -61,22 +62,34 @@ class ClienteSerializer(serializers.ModelSerializer):
         fields = ('id_cliente', 'nome', 'cpf', 'telefone', 'observacoes', 'endereco')
 
 class ClienteCreateSerializer(serializers.ModelSerializer):
-    endereco = EnderecoSerializer()
+    endereco = EnderecoSerializer(required=False)
 
     class Meta:
         model = Cliente
         fields = ('id_cliente', 'nome', 'cpf', 'telefone', 'observacoes', 'endereco')
+        read_only_fields = ('id_cliente',)
 
     def create(self, validated_data):
-        endereco_data = validated_data.pop('endereco')
+        endereco_data = validated_data.pop('endereco', None)
         cliente = Cliente.objects.create(**validated_data)
-        Endereco.objects.create(id_cliente=cliente, **endereco_data)
+
+        if endereco_data:
+            Endereco.objects.create(id_cliente=cliente, **endereco_data)
+
         return cliente
 
 class EstoqueSerializer(serializers.ModelSerializer):
+    estoque_disponivel = serializers.SerializerMethodField()
     class Meta:
         model = Estoque
         fields = '__all__'
+
+    def get_estoque_disponivel(self, obj):
+        reservas = Venda.objects.filter(
+            id_produto=obj,
+            status_pedido=0
+        ).aggregate(total=Sum('quantidade'))['total'] or 0
+        return obj.quantidade - reservas
 
 class EstoqueMovimentacaoSerializer(serializers.ModelSerializer):
     produto = EstoqueSerializer(source='id_produto', read_only=True)
@@ -84,9 +97,7 @@ class EstoqueMovimentacaoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EstoqueMovimentacao
-        fields = ('id_movimentacao', 'id_produto', 'produto', 'id_usuario', 'usuario',
-                 'tipo_movimentacao', 'quantidade', 'valor', 'data_movimentacao',
-                 'observacoes', 'fornecedor')
+        fields = '__all__'
 
 class VendaSerializer(serializers.ModelSerializer):
     produto = EstoqueSerializer(source='id_produto', read_only=True)

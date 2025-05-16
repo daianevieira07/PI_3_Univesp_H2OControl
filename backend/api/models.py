@@ -50,14 +50,21 @@ class Estoque(models.Model):
     produto = models.CharField(max_length=200)
     quantidade = models.IntegerField()
     data_ultima_venda = models.DateTimeField(null=True, blank=True)
+    preco_unitario = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+    def delete(self, *args, **kwargs):
+        if Venda.objects.filter(id_produto=self, status_pedido=0).exists():
+            raise ValidationError("Não é possível excluir este produto: existem vendas em andamento.")
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.produto
 
 class EstoqueMovimentacao(models.Model):
     id_movimentacao = models.AutoField(primary_key=True)
-    id_produto = models.ForeignKey(Estoque, on_delete=models.CASCADE)
+    id_produto = models.ForeignKey(Estoque, null=True, blank=True, on_delete=models.SET_NULL)
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    nome_produto = models.CharField(max_length=255)
     tipo_movimentacao = models.BooleanField()  # True para entrada, False para saída
     quantidade = models.IntegerField()
     valor = models.DecimalField(max_digits=10, decimal_places=2)
@@ -83,7 +90,8 @@ class Venda(models.Model):
     ]
 
     id_venda = models.AutoField(primary_key=True)
-    id_produto = models.ForeignKey(Estoque, on_delete=models.PROTECT)
+    id_produto = models.ForeignKey(Estoque, on_delete=models.SET_NULL, null=True)
+    nome_produto = models.CharField(max_length=255, blank=True)
     id_cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
     id_usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT)
     quantidade = models.IntegerField()
@@ -92,6 +100,11 @@ class Venda(models.Model):
     tipo_pagamento = models.CharField(max_length=50, choices=FORMA_PAGAMENTO_CHOICES)
     status_pedido = models.SmallIntegerField(choices=STATUS_CHOICES, default=0)
     observacoes = models.TextField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.id_produto and not self.nome_produto:
+            self.nome_produto = self.id_produto.produto  # copia o nome
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Venda {self.id_venda} - {self.id_cliente.nome}" 

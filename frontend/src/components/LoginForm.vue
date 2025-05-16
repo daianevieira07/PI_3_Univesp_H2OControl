@@ -5,6 +5,7 @@ import api from '@/services/http';
 import { useMainStore } from '@/stores/session';
 import ModalSignup from './ModalSignup.vue';
 import { validateEmail, validatePassword } from '@/utils/validateFields';
+import { userChecker } from '@/utils/userChecker';
 
 const emit = defineEmits(['success', 'error', 'successSignup', 'errorSignup']);
 const router = useRouter();
@@ -42,9 +43,10 @@ const acceptLogin = async () => {
         const success = await obterToken();
         if (success) {
             emit('success'); 
+            userChecker();
             setTimeout(() => {
                 auth.toggleValue(true);
-                router.push({ name: 'dashboard' }); 
+                router.push({ name: 'dashboard.resumo' }); 
             }, 2000);
         }
     }

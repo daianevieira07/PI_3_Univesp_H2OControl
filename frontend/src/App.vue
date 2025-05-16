@@ -3,7 +3,7 @@ import { RouterView } from 'vue-router'
 import { onMounted } from 'vue';
 import { validarToken } from '@/utils/authChecker';
 
-onMounted(() => {
+onMounted(async() => {
   validarToken(); // revalida ao carregar o app
 });
 </script>
@@ -13,5 +13,4 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
 </style>

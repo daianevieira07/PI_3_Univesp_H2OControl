@@ -33,7 +33,6 @@ const clienteAtual = computed(() =>
 const getCliente = async () => {
   try {
     clientes.value = await fetchDatabase('clientes', 'all', 'id_cliente', 'all');
-    // console.log(clientes.value);
   } catch {
     clientes.value = [];
   }

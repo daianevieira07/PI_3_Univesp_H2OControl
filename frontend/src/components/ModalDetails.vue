@@ -47,7 +47,6 @@ const getDetails = async (id_cliente, id_venda) => {
   } catch (error) {
     console.error('Erro ao obter detalhes do cliente:', error);
   } finally {
-    console.log('resultado do getDetails:', cliente.value, 'venda: ', venda.value);
     isLoading.value = false;
   }
 };
@@ -56,7 +55,6 @@ const getDetails = async (id_cliente, id_venda) => {
 // Atualiza os dados quando o pedido muda
 watch( () => props.pedido, (novoPedido) => {
   if (novoPedido?.id_cliente) {
-    console.log('cliente do Novo pedido:', novoPedido.cliente, 'Venda :', novoPedido.id_venda); //Console citado;
     getDetails(novoPedido.id_cliente, novoPedido.id_venda);
 }});
 

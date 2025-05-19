@@ -10,6 +10,7 @@ from .serializers import (
     EnderecoSerializer, EstoqueSerializer, EstoqueMovimentacaoSerializer,
     VendaSerializer
 )
+from django.db import models
 
 class DynamicListMixin:
     @action(detail=False, methods=['get'])
@@ -94,6 +95,21 @@ class ClienteViewSet(DynamicListMixin, viewsets.ModelViewSet):
         if self.action == 'create':
             return ClienteCreateSerializer
         return ClienteSerializer
+
+    @action(detail=False, methods=['get'])
+    def buscar(self, request):
+        termo = request.query_params.get('termo', '')
+        if not termo:
+            return Response([])
+        
+        clientes = Cliente.objects.filter(
+            models.Q(nome__icontains=termo) |
+            models.Q(cpf__icontains=termo) |
+            models.Q(telefone__icontains=termo)
+        )
+        
+        serializer = self.get_serializer(clientes, many=True)
+        return Response(serializer.data)
 
 class EnderecoViewSet(DynamicListMixin, viewsets.ModelViewSet):
     queryset = Endereco.objects.all()
